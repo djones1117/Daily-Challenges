@@ -9,3 +9,8 @@ function greet(name) {
 }
 
 greet("Dylan");
+
+
+function addOne(n) {
+  return n + 1;
+}
