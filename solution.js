@@ -460,3 +460,227 @@ function intersection(a1, a2) {
 
 
 
+
+/*
+  The solution for this challenge is best implemented using
+  a data structure known as a 'stack'. Think of a stack working a lot
+  like a stack of papers where you always place new papers on top
+  and always remove the top paper.
+*/
+
+function balancedBrackets(str) {
+  // can't be balanced if string odd in length
+  if (str.length % 2) return false;
+  let stack = [];
+  for (let i = 0; i < str.length; i++) {
+    let b = str.charAt(i);
+    if ( '([{'.includes(b) ) {
+      // add opening brackets to the stack
+      stack.push(b);
+    } else {
+      // not an opening bracket, so remove last opening and check if matched
+      if (!'() {} []'.includes(stack.pop() + b)) return false;
+    }
+  }
+  return stack.length === 0;
+}
+
+/*--- Using Array.every method to iterate unless false is returned
+      Also using arrow function ---*/
+// function balancedBrackets(str) {
+//   let stack = [];
+//   return str.split('').every(c => {
+//     if ('([{'.includes(c)) {
+//       return stack.push(c);
+//     } else {
+//       return '() {} []'.includes(stack.pop() + c)
+//     }
+//   }) && stack.length === 0;
+// }
+
+/*--- Holy ternary Batman! Almost a one-liner! ---*/
+// function balancedBrackets(str) {
+//   let a = [];
+//   return str.split('').every(c => '([{'.includes(c) ? a.push(c) : '() {} []'.includes(a.pop() + c)) && a.length === 0;
+// }
+
+
+
+
+
+/* Naive approach using for loops - :( */
+function isWinningTicket(ticket){
+  let winner = true;
+  for (let i = 0; i < ticket.length; i++) {
+    let charFromNumber = String.fromCharCode(ticket[i][1]);
+    if (!ticket[i][0].includes(charFromNumber)) {
+      winner = false;
+      break;
+    }
+  }
+  return winner;
+}
+
+/* Array.prototype.every is sweet */
+// function isWinningTicket(ticket){
+//   return ticket.every(function(arr) {
+//     return arr[0].includes(String.fromCharCode(arr[1]));
+//   });
+// }
+
+/* Arrow functions help make concise one-liners possible */
+// function isWinningTicket(ticket){
+//   return ticket.every(arr => arr[0].includes(String.fromCharCode(arr[1])));
+// }
+
+
+
+
+function getNumForIP(ip) {
+  // reverse the chunks so that the we can use the index like 256**idx 
+  let chunks = ip.split('.').reverse();
+  let sum = 0;
+  chunks.forEach(function(chunk, idx) {
+    sum += parseInt(chunk) * 256**idx;
+  });
+  return sum;
+}
+
+// Remove the necessity to reverse with 256**(3-idx) 
+// function getNumForIP(ip) {
+//   let chunks = ip.split('.');
+//   let sum = 0;
+//   chunks.forEach(function(chunk, idx) {
+//     sum += parseInt(chunk) * 256**(3-idx);
+//   });
+//   return sum;
+// }
+
+/* Using reduce method gives us a one-liner */
+// function getNumForIP(ip) {
+//   return ip.split('.').reduce((sum, chunk, idx) => sum + parseInt(chunk) * 256**(3-idx), 0);
+// }
+
+
+
+function toCamelCase(str) {
+  return str.replace(/[_-]\w/g, function(match) {
+    return match.charAt(1).toUpperCase();
+  });
+}
+
+/* Take advantage of the implicit return of an arrow function for a one-line solution */
+// function toCamelCase(str) {
+//   return str.replace(/[_-]\w/g, match => match.charAt(1).toUpperCase());
+// }
+
+
+
+function countTheBits(int) {
+  return int.toString(2).split('').filter(bit => bit === '1').length;
+}
+
+/* Using a regular expression. Note || operator to provide an array so that can use length if there are no matches */
+// function countTheBits(int) {
+//   return (int.toString(2).match(/1/g) || []).length;
+// }
+
+
+
+
+
+/*--- Process one character at a time ---*/
+function gridTrip(xyArr, moves) {
+  // create result array with starting positions
+  let result = [xyArr[0], xyArr[1]];
+  // lookup object used to map direction character to x or y index and a multiplier
+  // e.g., if direction is 'U', the first element of the 'U' array, 0, represents 
+  // which element of results to "adjust" and the second element is the multiplier
+  const lookup = {'U': [0, 1], 'R': [1, 1], 'D': [0, -1], 'L': [1, -1]};
+  let idx = 0;
+  while (idx < moves.length) {
+    // first char of the move string is the direction to be used to access the lookup object
+    let dir = moves[idx];
+    idx++;
+    let numString = '';
+    // 'grab' digits (length of move)
+    while ('0123456789'.includes(moves[idx]) && idx < moves.length) {
+      numString += moves[idx];
+      idx++;
+    }
+    // "adjust" result's x or y value
+    result[lookup[dir][0]] += parseInt(numString) * lookup[dir][1];
+  }
+  return result;
+}
+
+/*--- Using regular expressions to break up the moves into an array ---*/
+// function gridTrip(xyArr, moves) {
+//   let result = [xyArr[0], xyArr[1]];
+//   const lookup = {'U': [0, 1], 'R': [1, 1], 'D': [0, -1], 'L': [1, -1]}; 
+//   // regular expressions are fantastic - be sure to use the 'global' flag with the match method
+//   moves = moves.match(/[UDLR]\d+/g);
+//   moves.forEach(function(move) {
+//     let dir = move.charAt(0);
+//     result[lookup[dir][0]] += move.substr(1) * lookup[dir][1];
+//   });
+//   return result;
+// }
+
+
+
+
+/* inefficent solution - does not leverage sorted array */
+function addChecker(nums, total) {
+  let result = false;
+  for (let i = 0; i < nums.length - 1; i++) {
+    for (let j = i + 1; j < nums.length; j++) {
+      if (nums[i] + nums[j] === total) return true; 
+    }
+  }
+  return result;
+}
+
+/* efficent solution - leveraging the sorted array */
+// function addChecker(nums, total) {
+//   let result = false;
+//   let start = 0
+//   let end = nums.length - 1; 
+//   while (start < end) {
+//     let sum = nums[start] + nums[end];
+//     if (sum === total) return true;
+//     sum < total ? start++ : end--;
+//   }
+//   return result;
+// }
+
+
+
+
+
+function totalTaskTime(tasks, numThreads) {
+  let time = 0, shortest, threads;
+  while(tasks.length > numThreads) {
+    // extract a task for each thread
+    threads = tasks.splice(0, numThreads);
+    // Find out the time for the task that will finish first.
+    // Using the spread operator to provide Math.min with a list of values
+    shortest = Math.min(...threads);
+    // Add the time for that shortest task
+    time += shortest;
+    // Reduce each task in threads by the shortest task time and
+    // remove all of those completed "short" tasks
+    threads = threads.map(t => t - shortest).filter(t => t);
+    // Put any remaining tasks back into threads and do it again (loop)...
+    tasks = threads.concat(tasks);
+  }
+  // When num remaining tasks is less or equal to numThreads,
+  // we just need to add the time from the longest remaining task.
+  // The ternary protects against Math.max returning infinity on an empty array
+  return time + (tasks.length ? Math.max(...tasks) : 0);
+}
+
+/* One-liner using different 'addition' approach */
+// function totalTaskTime(tasks, numThreads) {
+//   return tasks.length && Math.max(...tasks.reduce((b, t, i) => (b[b.indexOf(Math.min(...b))] += t) && b, tasks.splice(0, numThreads)));
+// }
