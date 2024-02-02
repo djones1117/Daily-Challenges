@@ -5,6 +5,13 @@ function sayHello() {
 console.log(sayHello());
 
 
+for (let i = 0; i < 10; i++){
+  if(i ===6){
+    return;
+  }
+  console.log(i);
+}
+
 function greet(name) {
   console.log("hello , " + name + "!");
 }
@@ -17,6 +24,7 @@ function addOne(n) {
   return n + 1;
 }
 
+console.log(addOne(9))
 
 function addTwoNumbers(a, b) {
   if (typeof a === 'number' && typeof b === 'number') {

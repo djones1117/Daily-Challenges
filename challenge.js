@@ -8,7 +8,8 @@
 // Your solution for 00-sayHello (example) here
 
 
-
+//Challenge: 01- write a javascript for loop that logs each number from 0 - 9 but stops
+//executing  before it reaches the number 6
 
 
 // Challenge: greet (example)
